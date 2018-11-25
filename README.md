@@ -14,5 +14,7 @@
 * fix SyntaxBug
 > ver 1.0.0.3
 * fix pathError
+> ver 1.0.1.0
+* use packageExists all of package with out php
 ### Warning! after setting finish your server will be reboot
 

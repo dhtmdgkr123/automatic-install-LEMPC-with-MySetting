@@ -12,5 +12,7 @@
 * fix SyntaxBug
 > ver 1.0.0.2
 * fix SyntaxBug
+> ver 1.0.0.3
+* fix SyntaxBug
 ### Warning! after setting finish your server will be reboot
 

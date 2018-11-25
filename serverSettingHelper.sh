@@ -29,7 +29,7 @@ else
         sed -i 's/pam_service_name=vsftpd/pam_service_name=ftp/g' /etc/vsftpd.conf &&
         echo "root" > /etc/vsftpd.chroot_list && service vsftpd restart
     fi && clear && echo "finish install and setting vsftpd and will be install nginx and setting" && sleep 1 &&
-    if !packageExists nginx; then
+    if ! packageExists nginx; then
         DIRECTORY="/var/www/html" &&
         apt-get -y install nginx &&
         if [ ! -d "$DIRECTORY" ]; then

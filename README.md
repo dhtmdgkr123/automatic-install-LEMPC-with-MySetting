@@ -8,6 +8,7 @@
 * install php7 (add curl)
 * install phpmyadmin
 * isntall codeigniter 3.1.4
-
+> ver 1.0.0.1
+* fix SyntaxBug
 ### Warning! after setting finish your server will be reboot
 

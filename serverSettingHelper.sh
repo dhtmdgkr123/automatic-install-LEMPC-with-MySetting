@@ -33,7 +33,7 @@ else
         DIRECTORY="/var/www/html" &&
         apt-get -y install nginx &&
         if [ ! -d "$DIRECTORY" ]; then
-            mkdir -p $DIRECTORY &&
+            mkdir -p $DIRECTORY
         fi;
     fi && cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak &&
     echo "server {

@@ -2,12 +2,18 @@
 packageExists() {
     return dpkg -l "$1" &> /dev/null
 }
+
+folderExists () {
+    return 
+}
+
 clear &&
 if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user" 2>&1
   exit 1
 else
-    cd ~ && mkdir CodeIgniter
+    cd ~ &&
+    mkdir CodeIgniter
     echo "update and upgrade Server!" &&
     apt-get -y update && clear && echo "finish update repository and will be upgrade server" && sleep 1 &&
     apt-get -y upgrade && clear && echo "finish upgrade packages and will be dist upgrade" && sleep 1 &&
@@ -86,7 +92,7 @@ else
     apt-get -y install mariadb-server mariadb-client && clear && echo "finish install db server" && sleep 1 &&
     apt-get -y update && apt-get -y install php php-fpm php-curl &&
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.0/fpm/php.ini && service php7.0-fpm restart &&
-    mv index.nginx-debian.html index.php && echo "<?php phpinfo();?>" > index.php &&
+    mv /var/www/html/index.nginx-debian.html index.php && echo "<?php phpinfo();?>" > index.php &&
     apt-get -y install phpmyadmin unzip && wget https://github.com/bcit-ci/CodeIgniter/archive/3.1.9.zip &&
     unzip 3.1.9.zip &&
     cp -r CodeIgniter-3.1.9/* /var/www/html &&

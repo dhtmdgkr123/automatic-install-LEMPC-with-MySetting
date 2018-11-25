@@ -1,4 +1,4 @@
-#server Setting Script base on bash and ubuntu16.04 LTS
+# server Setting Script base on bash and ubuntu16.04 LTS
 
 > ver 1.0.0
 * install open-ssh and allow root access

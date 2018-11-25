@@ -1,5 +1,5 @@
 #!/bin/bash
-function packageExists() {
+packageExists() {
     return dpkg -l "$1" &> /dev/null
 }
 clear &&
@@ -9,10 +9,10 @@ if [[ $EUID -ne 0 ]]; then
 else
     cd ~ && mkdir CodeIgniter
     echo "update and upgrade Server!" &&
-    apt-get -y update &&
-    apt-get -y upgrade &&
-    apt-get -y dist-upgrade &&
-    apt-get -y autoremove && clear && echo "finish update server install ssh" && sleep 1
+    apt-get -y update && clear && echo "finish update repository and will be upgrade server" && sleep 1 &&
+    apt-get -y upgrade && clear && echo "finish upgrade packages and will be dist upgrade" && sleep 1 &&
+    apt-get -y dist-upgrade && clear && echo "finish dist upgrade and wiil be install remove "
+    apt-get -y autoremove && clear && echo "finish update server and will be install ssh" && sleep 1
     if ! packageExists openssh-server; then
         apt-get -y install openssh-server &&
         sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config &&

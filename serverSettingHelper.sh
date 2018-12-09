@@ -93,9 +93,7 @@ else
     fi && sleep 1 &&
     apt-get -y update && apt-get -y install php php-fpm php-curl && cp /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.bak
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.0/fpm/php.ini && ln -s /usr/share/phpmyadmin $DIRECTORY && service php7.0-fpm restart &&
-    mv $DIRECTORY/index.nginx-debian.html index.php &&
+    mv $DIRECTORY/index.nginx-debian.html index.php && cp -r ~/CodeIgniter-3.1.9/* /var/www/html && rm -r 3.1.9.zip CodeIgniter-3.1.9 &&
     apt-get -y install phpmyadmin &&
-    unzip 3.1.9.zip &&
-    cp -r CodeIgniter-3.1.9/* $DIRECTORY &&
-    rm -rf CodeIgniter-3.1.9 3.1.9.zip
+    unzip 3.1.9.zip
 fi && reboot

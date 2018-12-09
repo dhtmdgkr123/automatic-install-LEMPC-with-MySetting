@@ -47,6 +47,9 @@ $curl -S https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-w
 >><h4>Version 1.0.1.2</h4>
 >>1. add stable Code<br />
 
+>><h4>Version 1.0.1.3</h4>
+>>1. remove Codeigniterfolder variable and edit unzip pacakge error<br />
+
 License
 -
 GPL-3.0 Copyright (c) osh12201@gmail.com

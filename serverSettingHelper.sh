@@ -40,16 +40,23 @@ else
         if [ ! -d "$DIRECTORY" ]; then
             mkdir -p $DIRECTORY
         fi;
-    fi && cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak &&
+    fi && 
+    if ! packageExists mariadb-server; then
+        apt-get -y install mariadb-server mariadb-client && clear && echo "finish install db server and install php!"
+    fi && sleep 1 &&
+    apt-get -y update && apt-get -y install php php-fpm php-curl && cp /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.bak
+    sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.0/fpm/php.ini &&
+    if [ ! -e $DIRECTORY/phpmyadmin ]; then
+        ln -s /usr/share/phpmyadmin $DIRECTORY
+    fi && service php7.0-fpm restart &&
+    mv $DIRECTORY/index.nginx-debian.html index.php && cp -r ~/CodeIgniter-3.1.9/* /var/www/html && rm -r 3.1.9.zip CodeIgniter-3.1.9 &&
+    cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak &&
     echo "server {
         listen 80 default_server;
         listen [::]:80 default_server;
-
         root /var/www/html;
         index index.php index.html index.htm index.nginx-debian.html;
-
         server_name server_domain_or_IP;
-
         location /phpmyadmin {
                root /usr/share/;
                index index.php index.html index.htm;
@@ -62,37 +69,28 @@ else
                        include /etc/nginx/fastcgi_params;
                 }
                 location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
-                    root /usr/share/;
+                    try_files \$uri =404;
                 }
         }
         location /phpMyAdmin {
                rewrite ^/* /phpmyadmin last;
         }
-
-    	if (!-e \$request_filename) {
+       if (!-e \$request_filename) {
             rewrite ^/(.*)$ /index.php?/\$1 last;
             break;
-        } 
-
+        }
         location / {
             try_files \$uri \$uri/ =404;
         }
-        
+
         location ~ \.php$ {
             include snippets/fastcgi-php.conf;
             fastcgi_pass unix:/run/php/php7.0-fpm.sock;
         }
-
         location ~ /\.ht {
             deny all;
         }
     }
 " > /etc/nginx/sites-available/default &&
-    if ! packageExists mariadb-server; then
-        apt-get -y install mariadb-server mariadb-client && clear && echo "finish install db server and install php!"
-    fi && sleep 1 &&
-    apt-get -y update && apt-get -y install php php-fpm php-curl && cp /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.bak
-    sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.0/fpm/php.ini && ln -s /usr/share/phpmyadmin $DIRECTORY && service php7.0-fpm restart &&
-    mv $DIRECTORY/index.nginx-debian.html index.php && cp -r ~/CodeIgniter-3.1.9/* /var/www/html && rm -r 3.1.9.zip CodeIgniter-3.1.9 &&
-    apt-get -y install phpmyadmin
+apt-get -y install phpmyadmin
 fi && reboot

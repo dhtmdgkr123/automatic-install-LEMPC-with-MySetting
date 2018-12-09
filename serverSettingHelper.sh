@@ -11,15 +11,15 @@ if [[ $EUID -ne 0 ]]; then
 else
     cd ~ && CODEIGNITERDIR="CodeIgniter" &&
     if [ ! -d "$CODEIGNITERDIR" ]; then
-        mkdir ~/CodeIgniter
-    
+        mkdir ~/$CODEIGNITERDIR
+        
     fi && echo "update and upgrade Server!" &&
     apt-get -y update && clear && echo "finish update repository and will be upgrade server" && sleep 1 &&
     apt-get -y upgrade && clear && echo "finish upgrade packages and will be dist upgrade" && sleep 1 &&
     apt-get -y dist-upgrade && clear && echo "finish dist upgrade and wiil be install remove "
     apt-get -y autoremove && clear && echo "finish update server and will be install ssh" && sleep 1
     if ! packageExists openssh-server; then
-        apt-get -y install openssh-server &&
+        apt-get -y install openssh-server && cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak &&
         sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config &&
         service ssh restart
     fi && clear && echo "Success install ssh and Setting and will be setting and install ftp" && sleep 1 &&
@@ -50,15 +50,6 @@ else
 
         server_name server_domain_or_IP;
 
-    	if (!-e \$request_filename) {
-            rewrite ^/(.*)$ /index.php?/\$1 last;
-            break;
-        }
-
-        location / {
-            try_files \$uri \$uri/ =404;
-        }
-
         location /phpmyadmin {
                root /usr/share/;
                index index.php index.html index.htm;
@@ -78,6 +69,15 @@ else
                rewrite ^/* /phpmyadmin last;
         }
 
+    	if (!-e \$request_filename) {
+            rewrite ^/(.*)$ /index.php?/\$1 last;
+            break;
+        } 
+
+        location / {
+            try_files \$uri \$uri/ =404;
+        }
+        
         location ~ \.php$ {
             include snippets/fastcgi-php.conf;
             fastcgi_pass unix:/run/php/php7.0-fpm.sock;
@@ -89,11 +89,11 @@ else
     }
 " > /etc/nginx/sites-available/default &&
     if ! packageExists mariadb-server; then
-        apt-get -y install mariadb-server mariadb-client && clear && echo "finish install db server"
+        apt-get -y install mariadb-server mariadb-client && clear && echo "finish install db server and install php!"
     fi && sleep 1 &&
-    apt-get -y update && apt-get -y install php php-fpm php-curl &&
-    sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.0/fpm/php.ini && service php7.0-fpm restart &&
-    mv $DIRECTORY/index.nginx-debian.html index.php && echo "<?php phpinfo();?>" > index.php &&
+    apt-get -y update && apt-get -y install php php-fpm php-curl && cp /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.bak
+    sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.0/fpm/php.ini && ln -s /usr/share/phpmyadmin $DIRECTORY && service php7.0-fpm restart &&
+    mv $DIRECTORY/index.nginx-debian.html index.php &&
     apt-get -y install phpmyadmin unzip && wget https://github.com/bcit-ci/CodeIgniter/archive/3.1.9.zip &&
     unzip 3.1.9.zip &&
     cp -r CodeIgniter-3.1.9/* $DIRECTORY &&

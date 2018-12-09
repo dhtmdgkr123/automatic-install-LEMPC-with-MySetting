@@ -53,6 +53,9 @@ $curl -S https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-w
 >><h4>Version 1.0.1.4</h4>
 >>1. fix SyntaxBug<br />
 
+>><h4>Version 1.0.1.5</h4>
+>>1. edit /etc/nginx/sites-available/default and edit some logic<br />
+
 
 License
 -

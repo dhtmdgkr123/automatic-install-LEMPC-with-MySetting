@@ -9,10 +9,10 @@ if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user" 2>&1
   exit 1
 else
-    cd ~ && CODEIGNITERDIR="CodeIgniter" &&
-    if [ ! -d "$CODEIGNITERDIR" ]; then
-        mkdir ~/$CODEIGNITERDIR
-        
+    cd ~ &&
+    if ! packageExists unzip; then
+        apt-get -y install unzip && 
+        wget https://github.com/bcit-ci/CodeIgniter/archive/3.1.9.zip && unzip 3.1.9.zip &&
     fi && echo "update and upgrade Server!" &&
     apt-get -y update && clear && echo "finish update repository and will be upgrade server" && sleep 1 &&
     apt-get -y upgrade && clear && echo "finish upgrade packages and will be dist upgrade" && sleep 1 &&
@@ -94,7 +94,7 @@ else
     apt-get -y update && apt-get -y install php php-fpm php-curl && cp /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.bak
     sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.0/fpm/php.ini && ln -s /usr/share/phpmyadmin $DIRECTORY && service php7.0-fpm restart &&
     mv $DIRECTORY/index.nginx-debian.html index.php &&
-    apt-get -y install phpmyadmin unzip && wget https://github.com/bcit-ci/CodeIgniter/archive/3.1.9.zip &&
+    apt-get -y install phpmyadmin &&
     unzip 3.1.9.zip &&
     cp -r CodeIgniter-3.1.9/* $DIRECTORY &&
     rm -rf CodeIgniter-3.1.9 3.1.9.zip

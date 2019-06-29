@@ -32,6 +32,10 @@ checkDir() {
 }
 
 
+successAndIntalledMessage() {
+    clear && echo "success to install $1 will be install $2" && sleep 1 && clear
+}
+
 
 
 nginxConfigSetting() {
@@ -40,7 +44,7 @@ nginxConfigSetting() {
             listen 80 default_server;
             listen [::]:80 default_server;
             root /var/www/html;
-            index index.php index.html index.htm index.nginx-debian.html;
+            index index.php;
             server_name server_domain_or_IP;
             location /phpmyadmin {
                 root /usr/share/;
@@ -101,6 +105,7 @@ else
     if ! packageExists unzip; then
         installPackage unzip
     fi &&
+    
 
     ##################################
     ######### install unzip ##########
@@ -146,7 +151,8 @@ else
     ##################################
 
     if ! packageExists php; then
-        installPackage php7.3 php7.3-fpm
+        installPackage php7.3 && installPackage php7.3-fpm &&
+        php --ini
     fi &&
     
     ##################################
@@ -167,8 +173,8 @@ else
         curl -sS https://getcomposer.org/installer -o composer-setup.php &&
         php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
     fi && 
-    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH &&
-    composer create-project codeigniter/framework fw && mv ./fw/{.,}* ./ && rmdir fw
+    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm *.html &&
+    composer create-project codeigniter/framework fw; mv ./fw/{.,}* ./; rmdir fw
 
 
 

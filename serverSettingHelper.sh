@@ -32,6 +32,8 @@ checkDir() {
 }
 
 
+
+
 nginxConfigSetting() {
     cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak &&
     echo "server {
@@ -129,7 +131,7 @@ else
     ########## install nginx #########
     ##################################
     if ! packageExists nginx; then
-        installPackage intall nginx &&
+        installPackage nginx &&
         checkDir $NGINX_ROOT_PATH
 
         # if [ ! -d "$NGINX_ROOT_PATH" ]; then

@@ -27,7 +27,7 @@ installPackage() {
 
 checkDir() {
     if [ ! -d "$1" ]; then
-        mkdir -p $1
+        mkdir -p "$1"
     fi
 }
 
@@ -274,7 +274,7 @@ else
 # " > /etc/nginx/sites-available/default &&
 # apt-get -y install phpmyadmin
 
-
+fi;
 
 
 # fi && reboot

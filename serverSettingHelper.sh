@@ -155,12 +155,7 @@ else
     fi &&
 
 
-    ##################################
-    ########## install pma ###########
-    ##################################
-    if ! packageExists phpmyadmin; then
-        installPackage install phpmyadmin
-    fi &&
+
 
 
     ##################################
@@ -171,7 +166,23 @@ else
         php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
     fi && 
     export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH &&
-    composer create-project codeigniter/framework fw && mv ./fw/{.,}* ./ && rmdir fw &&
+    composer create-project codeigniter/framework fw && mv ./fw/{.,}* ./ && rmdir fw
+
+
+
+
+
+    ##################################
+    ########## install pma ###########
+    ##################################
+    
+    
+    # if ! packageExists phpmyadmin; then
+    #     installPackage install phpmyadmin
+    # fi &&
+
+
+
     
     ##################################
     ######## install composer ########

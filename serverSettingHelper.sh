@@ -274,7 +274,5 @@ else
 # " > /etc/nginx/sites-available/default &&
 # apt-get -y install phpmyadmin
 
-fi;
-
-
 # fi && reboot
+fi

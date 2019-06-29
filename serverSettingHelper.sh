@@ -77,8 +77,6 @@ nginxConfigSetting() {
     " > /etc/nginx/sites-available/default
 }
 
-
-
 clear && 
 if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user" 2>&1
@@ -91,10 +89,10 @@ else
     ##################################
     ##### update & upgrade server ####
     ##################################
-
+    
     apt-get -y update &&
     apt-get -y upgrade &&
-
+    
     ##################################
     ########## install zip ###########
     ##################################
@@ -132,10 +130,11 @@ else
     ##################################
     if ! packageExists nginx; then
         installPackage intall nginx &&
-        
-        if [ ! -d "$NGINX_ROOT_PATH" ]; then
-            mkdir -p $NGINX_ROOT_PATH
-        fi;
+        checkDir $NGINX_ROOT_PATH
+
+        # if [ ! -d "$NGINX_ROOT_PATH" ]; then
+        #     mkdir -p $NGINX_ROOT_PATH
+        # fi;
 
     fi && nginxConfigSetting && 
     
@@ -168,22 +167,17 @@ else
     ######## install composer ########
     ##################################
     if ! packageExists composer; then
-        curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin/
+        curl -sS https://getcomposer.org/installer -o composer-setup.php &&
+        php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
     fi && 
+    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH &&
+    composer create-project codeigniter/framework fw && mv ./fw/{.,}* ./ && rmdir fw &&
     
-
-
-
     ##################################
     ######## install composer ########
     ##################################
-    composer create-project 
-
-
-
-
+    # composer create-project
     
-
 #     cd ~ &&
 #     if ! packageExists unzip; then
 #         apt-get -y install unzip && 

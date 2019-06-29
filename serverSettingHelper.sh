@@ -146,14 +146,14 @@ else
     ##################################
 
     if ! packageExists php; then
-        installPackage install php7.3 php7.3-fpm
+        installPackage php7.3 php7.3-fpm
     fi &&
     
     ##################################
     ######## install maria-db ########
     ##################################
     if ! packageExists mariadb-server; then
-        installPackage install mariadb-server mariadb-client
+        installPackage mariadb-server mariadb-client
     fi &&
 
 

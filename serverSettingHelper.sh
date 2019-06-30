@@ -33,12 +33,17 @@ checkDir() {
 
 moveFiles() {
     mv ./fw/application/ ./fw/bin/ ./fw/vendor/ ./fw/composer.json ./fw/composer.lock ./fw/README.md  ../ &&
-    mv ./fw/public/index.php ./fw/public/.htaccess ./
+    mv ./fw/public/index.php ./fw/public/.htaccess ./ &&
+    rm -rf /var/www/html/fw
 }
 
 
 successAndIntalledMessage() {
     clear && echo "success to install $1 will be install $2" && sleep 1 && clear
+}
+
+installCodeigniter() {
+    composer create-project kenjis/codeigniter-composer-installer fw && composer require symfony/dotenv && moveFiles && service nginx restart
 }
 
 
@@ -66,7 +71,7 @@ nginxConfigSetting() {
                         try_files \$uri =404;
                     }
             }
-            location /phpMyAdmin {
+            location /phpMyAdmin {  
                 rewrite ^/* /phpmyadmin last;
             }
             if (!-e \$request_filename) {
@@ -157,7 +162,6 @@ else
 
     if ! packageExists php; then
         installPackage php7.3 && installPackage php7.3-fpm
-        
     fi &&
     
     ##################################
@@ -174,8 +178,8 @@ else
         curl -sS https://getcomposer.org/installer -o composer-setup.php &&
         php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
     fi && 
-    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm ./*.html && php --ini &&
-    composer create-project kenjis/codeigniter-composer-installer fw; moveFiles && service nginx restart
+    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm ./*.html && php --ini && installCodeigniter
+    
     
     ##################################
     ########## install pma ###########

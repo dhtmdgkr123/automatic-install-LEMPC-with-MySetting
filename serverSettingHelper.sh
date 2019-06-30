@@ -156,7 +156,7 @@ else
     ##################################
 
     if ! packageExists php; then
-        installPackage php7.3 && installPackage php7.3-fpm &&
+        installPackage php7.3 && installPackage php7.3-fpm
         
     fi &&
     
@@ -174,8 +174,8 @@ else
         curl -sS https://getcomposer.org/installer -o composer-setup.php &&
         php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
     fi && 
-    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm *.html && php --ini &&
-    composer create-project kenjis/codeigniter-composer-installer fw; moveFiles  && service nginx restart &&
+    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm ./*.html && php --ini &&
+    composer create-project kenjis/codeigniter-composer-installer fw; moveFiles && service nginx restart
     
     ##################################
     ########## install pma ###########

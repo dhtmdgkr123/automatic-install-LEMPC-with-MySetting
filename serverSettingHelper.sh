@@ -46,7 +46,7 @@ installComposer() {
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
 }
 installCodeigniter() {
-    composer create-project kenjis/codeigniter-composer-installer fw && composer require vlucas/phpdotenv && moveFiles && service nginx restart
+    composer create-project kenjis/codeigniter-composer-installer fw && cd $(pwd)/fw && composer require vlucas/phpdotenv && cd../ && moveFiles && service nginx restart
 }
 
 nginxConfigSetting() {

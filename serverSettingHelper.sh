@@ -41,7 +41,7 @@ moveFiles() {
 removeVendorFile() {
     WD=$(pwd) &&
     cd ../vendor/codeigniter/framework &&
-    rm -rf ./application/ ./composer.json ./user_guide
+    rm -rf ./application/ ./composer.json ./user_guide ./index.php
 }
 
 successAndIntalledMessage() {

@@ -60,12 +60,12 @@ installComposer() {
 installCodeigniter() {
     NOW=$(pwd) &&
     composer create-project kenjis/codeigniter-composer-installer fw &&
-    cd $NOW/fw &&
+    cd "$NOW"/fw &&
     composer require vlucas/phpdotenv &&
-    cd $NOW &&
+    cd "$NOW" &&
     moveFiles &&
     removeVendorFile &&
-    cd $NOW && overWriteFile $NOW
+    cd "$NOW" && overWriteFile "$NOW"
     service nginx restart
 }
 
@@ -124,8 +124,8 @@ installRedis() {
     sudo make install &&
 
 
-    SCRIPT=$(readlink -f $0)
-    SCRIPTPATH=$(dirname $SCRIPT)
+    # SCRIPTPATH=$(dirname $SCRIPT)
+    SCRIPTPATH=$(pwd)
 
     REDIS_PORT=6379
     REDIS_CONFIG_FILE="/etc/redis/$REDIS_PORT.conf"
@@ -223,7 +223,7 @@ EOT
         chkconfig --level 345 redis_${REDIS_PORT} on
     elif command -v update-rc.d >/dev/null 2>&1; then
         update-rc.d redis_${REDIS_PORT} defaults
-
+    fi
 
     /etc/init.d/redis_$REDIS_PORT start
 

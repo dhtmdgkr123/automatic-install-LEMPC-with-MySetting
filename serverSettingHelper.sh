@@ -37,7 +37,6 @@ moveFiles() {
     rm -rf /var/www/html/fw
 }
 
-
 successAndIntalledMessage() {
     clear && echo "success to install $1 will be install $2" && sleep 1 && clear
 }
@@ -46,7 +45,7 @@ installComposer() {
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
 }
 installCodeigniter() {
-    composer create-project kenjis/codeigniter-composer-installer fw && cd $(pwd)/fw && composer require vlucas/phpdotenv && cd../ && moveFiles && service nginx restart
+    composer create-project kenjis/codeigniter-composer-installer fw && cd $(pwd)/fw && composer require vlucas/phpdotenv && cd ../ && moveFiles && service nginx restart
 }
 
 nginxConfigSetting() {

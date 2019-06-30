@@ -41,7 +41,7 @@ moveFiles() {
 removeVendorFile() {
     WD=$(pwd) &&
     cd ../vendor/codeigniter/framework &&
-    rm -rf ./application/ ./composer.json ./user_guide cd $WD
+    rm -rf ./application/ ./composer.json ./user_guide && cd $WD
 }
 
 
@@ -202,14 +202,7 @@ else
     # if ! packageExists phpmyadmin; then
     #     installPackage install phpmyadmin
     # fi &&
-
-
-
     
-    ##################################
-    ######## install composer ########
-    ##################################
-    # composer create-project
     
 #     cd ~ &&
 #     if ! packageExists unzip; then

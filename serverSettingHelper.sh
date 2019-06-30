@@ -39,9 +39,9 @@ moveFiles() {
 
 
 removeVendorFile() {
-    WD=$(pwd) && clear && echo $WD && sleep 2 &&
-    cd ../vendor/codeigniter/framework && clear && echo $(pwd) && sleep 2 &&
-    rm -rf ./application/ ./composer.json ./user_guide && cd $WD
+    WD=$(pwd) &&
+    cd ../vendor/codeigniter/framework &&
+    rm -rf ./application/ ./composer.json ./user_guide
 }
 
 successAndIntalledMessage() {

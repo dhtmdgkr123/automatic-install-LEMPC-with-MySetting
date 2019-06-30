@@ -44,6 +44,12 @@ removeVendorFile() {
     rm -rf ./application/ ./composer.json ./user_guide ./index.php
 }
 
+overWriteFile() {
+    CURR_LOCATE=$1 &&
+    curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/refector/index.php > ./index.php &&
+    curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/refector/codeigniter.php > ../vendor/codeigniter/framework/system/core/CodeIgniter.php
+}
+
 successAndIntalledMessage() {
     clear && echo "success to install $1 will be install $2" && sleep 1 && clear
 }
@@ -52,12 +58,15 @@ installComposer() {
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
 }
 installCodeigniter() {
+    NOW=$(pwd) &&
     composer create-project kenjis/codeigniter-composer-installer fw &&
-    cd $(pwd)/fw &&
+    cd $NOW/fw &&
     composer require vlucas/phpdotenv &&
-    cd ../ &&
+    cd $NOW &&
     moveFiles &&
     removeVendorFile &&
+    cd $NOW && overWriteFile $NOW
+    
     service nginx restart
 }
 

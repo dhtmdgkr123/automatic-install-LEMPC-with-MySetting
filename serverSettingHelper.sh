@@ -75,24 +75,6 @@ nginxConfigSetting() {
             root /var/www/html;
             index index.php;
             server_name server_domain_or_IP;
-            location /phpmyadmin {
-                root /usr/share/;
-                index index.php index.html index.htm;
-                location ~ ^/phpmyadmin/(.+\.php)$ {
-                        try_files \$uri =404;
-                        root /usr/share/;
-                        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
-                        fastcgi_index index.php;
-                        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-                        include /etc/nginx/fastcgi_params;
-                    }
-                    location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt))$ {
-                        try_files \$uri =404;
-                    }
-            }
-            location /phpMyAdmin {  
-                rewrite ^/* /phpmyadmin last;
-            }
             if (!-e \$request_filename) {
                 rewrite ^/(.*)$ /index.php?/\$1 last;
                 break;
@@ -100,7 +82,6 @@ nginxConfigSetting() {
             location / {
                 try_files \$uri \$uri/ =404;
             }
-
             location ~ \.php$ {
                 include snippets/fastcgi-php.conf;
                 fastcgi_pass unix:/run/php/php7.3-fpm.sock;
@@ -115,13 +96,21 @@ nginxConfigSetting() {
 installRedis() {
     if ! packageExists redis-server; then
         installPackage redis-server
-    fi
+    fi &&
 
     if ! packageExists php-redis; then
         installPackage php-redis
     fi &&
     
     service php7.3-fpm restart
+}
+
+installPma() {
+    cd ~ &&
+    wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.zip &&
+    unzip phpMyAdmin-4.9.0.1-all-languages.zip &&
+    mv ./phpMyAdmin-4.9.0.1-all-languages/ /var/www/html/pma &&
+    rm -rf ./phpMyAdmin-4.9.0.1-all-languages.zip
 }
 
 clear && 
@@ -228,15 +217,13 @@ else
     rm ./*.html &&
     php --ini &&
     installCodeigniter &&
-    installRedis $NGINX_ROOT_PATH
+    installRedis &&
+    
     
     
     ##################################
     ########## install pma ###########
     ##################################
-    
-    # if ! packageExists phpmyadmin; then
-    #     installPackage install phpmyadmin
-    # fi &&
+    installPma
     
 fi

@@ -39,11 +39,10 @@ moveFiles() {
 
 
 removeVendorFile() {
-    WD=$(pwd) &&
-    cd ../vendor/codeigniter/framework &&
+    WD=$(pwd) && clear && echo $WD && sleep 2 &&
+    cd ../vendor/codeigniter/framework && clear && echo $(pwd) && sleep 2 &&
     rm -rf ./application/ ./composer.json ./user_guide && cd $WD
 }
-
 
 successAndIntalledMessage() {
     clear && echo "success to install $1 will be install $2" && sleep 1 && clear
@@ -58,7 +57,7 @@ installCodeigniter() {
     composer require vlucas/phpdotenv &&
     cd ../ &&
     moveFiles &&
-    removeVendorFile &&
+    # removeVendorFile &&
     service nginx restart
 }
 

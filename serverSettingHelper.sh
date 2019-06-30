@@ -57,7 +57,7 @@ installCodeigniter() {
     composer require vlucas/phpdotenv &&
     cd ../ &&
     moveFiles &&
-    # removeVendorFile &&
+    removeVendorFile &&
     service nginx restart
 }
 

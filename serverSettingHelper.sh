@@ -39,13 +39,11 @@ moveFiles() {
 
 
 removeVendorFile() {
-    WD=$(pwd) &&
     cd ../vendor/codeigniter/framework &&
     rm -rf ./application/ ./composer.json ./user_guide ./index.php
 }
 
 overWriteFile() {
-    CURR_LOCATE=$1 &&
     curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/refector/index.php > ./index.php &&
     curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/refector/codeigniter.php > ../vendor/codeigniter/framework/system/core/CodeIgniter.php
 }
@@ -65,7 +63,7 @@ installCodeigniter() {
     cd "$NOW" &&
     moveFiles &&
     removeVendorFile &&
-    cd "$NOW" && overWriteFile "$NOW"
+    cd "$NOW" && overWriteFile
     service nginx restart
 }
 
@@ -115,8 +113,10 @@ nginxConfigSetting() {
 }
 
 installRedis() {
-    if ! packageExists redis-server then
+    if ! packageExists redis-server; then
         installPackage redis-server
+    fi
+
     if ! packageExists php-redis; then
         installPackage php-redis
     fi &&

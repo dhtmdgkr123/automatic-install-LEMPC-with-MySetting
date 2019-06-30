@@ -41,12 +41,13 @@ moveFiles() {
 successAndIntalledMessage() {
     clear && echo "success to install $1 will be install $2" && sleep 1 && clear
 }
-
-installCodeigniter() {
-    composer create-project kenjis/codeigniter-composer-installer fw && composer require symfony/dotenv && moveFiles && service nginx restart
+installComposer() {
+    curl -sS https://getcomposer.org/installer -o composer-setup.php &&
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
 }
-
-
+installCodeigniter() {
+    composer create-project kenjis/codeigniter-composer-installer fw && composer require vlucas/phpdotenv && moveFiles && service nginx restart
+}
 
 nginxConfigSetting() {
     cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak &&
@@ -175,8 +176,7 @@ else
     ######## install composer ########
     ##################################
     if ! packageExists composer; then
-        curl -sS https://getcomposer.org/installer -o composer-setup.php &&
-        php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
+        installComposer
     fi && 
     export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm ./*.html && php --ini && installCodeigniter
     

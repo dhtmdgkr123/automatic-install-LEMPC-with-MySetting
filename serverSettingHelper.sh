@@ -31,6 +31,11 @@ checkDir() {
     fi
 }
 
+moveFiles() {
+    mv ./fw/application/ ./fw/bin/ ./fw/vendor/ ./fw/composer.json ./fw/composer.lock ./fw/README.md  ../ &&
+    mv ./fw/public/index.php ./fw/public/.htaccess ./
+}
+
 
 successAndIntalledMessage() {
     clear && echo "success to install $1 will be install $2" && sleep 1 && clear
@@ -90,7 +95,7 @@ if [[ $EUID -ne 0 ]]; then
 else
     cd ~ &&
     NGINX_ROOT_PATH="/var/www/html" &&
-    add-apt-repository ppa:ondrej/php -y 2>&1 &&
+    add-apt-repository ppa:ondrej/php -y 2>&1 
     
     ##################################
     ##### update & upgrade server ####
@@ -152,7 +157,7 @@ else
 
     if ! packageExists php; then
         installPackage php7.3 && installPackage php7.3-fpm &&
-        php --ini
+        
     fi &&
     
     ##################################
@@ -161,11 +166,7 @@ else
     if ! packageExists mariadb-server; then
         installPackage mariadb-server mariadb-client
     fi &&
-
-
-
-
-
+    
     ##################################
     ######## install composer ########
     ##################################
@@ -173,13 +174,9 @@ else
         curl -sS https://getcomposer.org/installer -o composer-setup.php &&
         php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
     fi && 
-    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm *.html &&
-    composer create-project codeigniter/framework fw; mv ./fw/{.,}* ./; rmdir fw
-
-
-
-
-
+    export COMPOSER_ALLOW_SUPERUSER=1 && cd $NGINX_ROOT_PATH && rm *.html && php --ini &&
+    composer create-project kenjis/codeigniter-composer-installer fw; moveFiles  && service nginx restart &&
+    
     ##################################
     ########## install pma ###########
     ##################################

@@ -93,6 +93,13 @@ nginxConfigSetting() {
     " > /etc/nginx/sites-available/default
 }
 
+installPhp() {
+    installPackage php7.3 &&
+    installPackage php7.3-fpm &&
+    installPackage php7.3-mysqli &&
+    installPackage php7.3-pdo
+}
+
 installRedis() {
     if ! packageExists redis-server; then
         installPackage redis-server
@@ -128,8 +135,7 @@ else
     
     apt-get -y update &&
     apt-get -y upgrade &&
-
-
+    
     ##################################
     ########## install gcc ###########
     ##################################
@@ -151,7 +157,6 @@ else
         installPackage unzip
     fi &&
     
-
     ##################################
     ######### install unzip ##########
     ##################################
@@ -166,8 +171,7 @@ else
     if ! packageExists openssh-server; then
         installPackage openssh-server
     fi && sshRootSetting &&
-
-
+    
     ##################################
     ####### install ftpServer ########
     ##################################
@@ -175,8 +179,7 @@ else
     if ! packageExists vsftpd; then
         installPackage vsftpd
     fi && vsftpdRootSetting &&
-
-
+    
     ##################################
     ########## install nginx #########
     ##################################
@@ -192,7 +195,7 @@ else
     ##################################
 
     if ! packageExists php; then
-        installPackage php7.3 && installPackage php7.3-fpm
+        
     fi &&
     
     ##################################

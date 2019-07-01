@@ -3,13 +3,12 @@ server Setting Script base on bash and ubuntu16.04 LTS
 
 Feature
 =
-+ Automatic install Nginx with setting codeigniter and PhpMyAdmin Setting <br />
-+ Automatic install MariaDb Setting<br />
-+ Automatic install php7 and php curl, fpm<br />
++ Automatic install Nginx <br />
++ Automatic install MariaDb <br />
++ Automatic install php 7.3, Codeigniter, dotenv using Composer<br />
 + Automatic install PhpMyAdmin<br />
 + Automatic install ssh server with root acces setting<br />
 + Automatic install vsftpd with root access and umask 022<br />
-+ Download and install Codeigniter<br />
 
 Usage
 =
@@ -55,6 +54,12 @@ $curl -S https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-w
 
 >><h4>Version 1.0.1.5</h4>
 >>1. edit /etc/nginx/sites-available/default and edit some logic<br />
+
+>><h4>Version 1.1.0</h4>
+>>1. Upgrade php 7.3<br />
+>>2. Install Coposer<br />
+>>3. Install Codeigniter<br />
+>>4. Install Dotenv<br />
 
 
 License

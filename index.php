@@ -50,8 +50,8 @@
  * NOTE: If you don't want to load dot env remove below if block code
  */
 if ( file_exists(realpath('../.env')) ) {
-    require_once realpath('../vendor/autoload.php');
-    (Dotenv\Dotenv::create(realpath('../')))->load();
+   require_once realpath('../vendor/autoload.php');
+   (Dotenv\Dotenv::createImmutable(realpath('../')))->load();
 }
 
 /*

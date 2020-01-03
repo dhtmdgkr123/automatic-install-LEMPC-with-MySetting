@@ -31,23 +31,6 @@ checkDir() {
     fi
 }
 
-moveFiles() {
-    mv ./fw/application/ ./fw/bin/ ./fw/vendor/ ./fw/composer.json ./fw/composer.lock ./fw/README.md  ../ &&
-    mv ./fw/public/index.php ./fw/public/.htaccess ./ &&
-    rm -rf /var/www/html/fw
-}
-
-
-removeVendorFile() {
-    cd ../vendor/codeigniter/framework &&
-    rm -rf ./application/ ./composer.json ./user_guide ./index.php
-}
-
-overWriteFile() {
-    curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/refector/index.php > ./index.php &&
-    curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/refector/codeigniter.php > ../vendor/codeigniter/framework/system/core/CodeIgniter.php
-}
-
 successAndIntalledMessage() {
     clear && echo "success to install $1 will be install $2" && sleep 1 && clear
 }
@@ -56,15 +39,8 @@ installComposer() {
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
 }
 installCodeigniter() {
-    NOW=$(pwd) &&
-    composer create-project kenjis/codeigniter-composer-installer fw &&
-    cd "$NOW"/fw &&
-    composer require vlucas/phpdotenv &&
-    cd "$NOW" &&
-    moveFiles &&
-    removeVendorFile &&
-    cd "$NOW" && overWriteFile
-    service nginx restart
+    cd /var &&
+    composer create-project dhtmdgkr123/codeigniter-composer-installer:dev-master www &&
 }
 
 nginxConfigSetting() {
@@ -72,7 +48,7 @@ nginxConfigSetting() {
     echo "server {
             listen 80 default_server;
             listen [::]:80 default_server;
-            root /var/www/html;
+            root /var/www/public;
             index index.php;
             server_name server_domain_or_IP;
             if (!-e \$request_filename) {
@@ -84,7 +60,7 @@ nginxConfigSetting() {
             }
             location ~ \.php$ {
                 include snippets/fastcgi-php.conf;
-                fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+                fastcgi_pass unix:/run/php/php7.4-fpm.sock;
             }
             location ~ /\.ht {
                 deny all;
@@ -94,10 +70,12 @@ nginxConfigSetting() {
 }
 
 installPhp() {
-    installPackage php7.3 &&
-    installPackage php7.3-fpm &&
-    installPackage php7.3-mysqli &&
-    installPackage php7.3-pdo
+    installPackage php7.4 &&
+    installPackage php7.4-fpm &&
+    installPackage php7.4-mysqli &&
+    installPackage php7.4-pdo &&
+    installPackage php7.4-mbstring &&
+    installPackage php7.4-intl
 }
 
 installRedis() {
@@ -109,15 +87,15 @@ installRedis() {
         installPackage php-redis
     fi &&
     
-    service php7.3-fpm restart
+    service php7.4-fpm restart
 }
 
 installPma() {
     cd ~ &&
-    wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.zip &&
-    unzip phpMyAdmin-4.9.0.1-all-languages.zip &&
-    mv ./phpMyAdmin-4.9.0.1-all-languages/ /var/www/html/pma &&
-    rm -rf ./phpMyAdmin-4.9.0.1-all-languages.zip
+    wget https://files.phpmyadmin.net/phpMyAdmin/5.0.0/phpMyAdmin-5.0.0-all-languages.zip &&
+    unzip phpMyAdmin-5.0.0-all-languages.zip &&
+    mv ./phpMyAdmin-5.0.0-all-languages/ /var/www/public/pma &&
+    rm -rf ./phpMyAdmin-5.0.0-all-languages.zip
 }
 
 clear && 
@@ -126,7 +104,7 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 else
     cd ~ &&
-    NGINX_ROOT_PATH="/var/www/html" &&
+    NGINX_ROOT_PATH="/var/www/public" &&
     add-apt-repository ppa:ondrej/php -y 2>&1 
     
     ##################################
@@ -219,6 +197,7 @@ else
     cd $NGINX_ROOT_PATH &&
     rm ./*.html &&
     php --ini &&
+    rm -rf /var/www &&
     installCodeigniter &&
     installRedis &&
     

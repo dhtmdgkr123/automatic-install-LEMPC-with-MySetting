@@ -104,7 +104,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 else
     cd ~ &&
-    NGINX_ROOT_PATH="/var/www/public" &&
     add-apt-repository ppa:ondrej/php -y 2>&1 
     
     ##################################
@@ -163,8 +162,7 @@ else
     ##################################
 
     if ! packageExists nginx; then
-        installPackage nginx &&
-        checkDir $NGINX_ROOT_PATH
+        installPackage nginx
     fi && nginxConfigSetting && 
     
 
@@ -194,8 +192,6 @@ else
     ######## install CI, REDIS #######
     ##################################
     export COMPOSER_ALLOW_SUPERUSER=1 &&
-    cd $NGINX_ROOT_PATH &&
-    rm ./*.html &&
     php --ini &&
     rm -rf /var/www &&
     installCodeigniter &&

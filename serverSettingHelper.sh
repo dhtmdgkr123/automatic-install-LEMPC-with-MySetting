@@ -40,7 +40,7 @@ installComposer() {
 }
 installCodeigniter() {
     cd /var &&
-    composer create-project dhtmdgkr123/codeigniter-composer-installer:dev-master www
+    composer create-project dhtmdgkr123/codeigniter-custom:dev-master www
 }
 
 nginxConfigSetting() {

@@ -3,6 +3,10 @@ packageExists() {
     return dpkg -l "$1" &> /dev/null
 }
 
+yesOrNo() {
+    echo $(whiptail --title "$2" --yesno "$1" 20 78 3>&1 1>&2 2>&3; echo $?)
+}
+
 sshRootSetting() {
     cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak &&
     sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config &&
@@ -30,39 +34,46 @@ checkDir() {
         mkdir -p "$1"
     fi
 }
+
+function validAddress() {
+    urlRegex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+    ipRegex='^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+    [[ $1 =~ $urlRegex || $1 =~ $ipRegex ]];
+    return
+}
+
 installComposer() {
     curl -sS https://getcomposer.org/installer -o composer-setup.php &&
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
 }
+
 installCodeigniter() {
     cd /var &&
     composer create-project dhtmdgkr123/codeigniter-custom:dev-master www
 }
 
+nginxHeaderSetting() {
+    cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak &&
+    echo "$(curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/NginxHeader.conf)" > /etc/nginx/nginx.conf
+}
+
 nginxConfigSetting() {
     cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak &&
-    echo "server {
-            listen 80 default_server;
-            listen [::]:80 default_server;
-            root /var/www/public;
-            index index.php;
-            server_name server_domain_or_IP;
-            if (!-e \$request_filename) {
-                rewrite ^/(.*)$ /index.php?/\$1 last;
-                break;
-            }
-            location / {
-                try_files \$uri \$uri/ =404;
-            }
-            location ~ \.php$ {
-                include snippets/fastcgi-php.conf;
-                fastcgi_pass unix:/run/php/php7.4-fpm.sock;
-            }
-            location ~ /\.ht {
-                deny all;
-            }
-        }
-    " > /etc/nginx/sites-available/default
+    title="Install HTTPS"
+    checkSSL="Do You Want to install Https?"
+    isUseSSL=$(yesOrNo "$checkSSL" "$title")
+    
+    if [[ "$isUseSSL" -eq 0 ]]; then
+        configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/SSLDefault"
+    else
+        configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/NoSSLDefault"    
+    fi;
+
+    while ! validAddress "$domainName" || [[ -z "$domainName" ]]; do
+        domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain or Ip Address \nIf You Enter Domain, You must include "http://" or "https://"\nExample: http://www.exam.com\nExample : 49.0.33.1" 20 78 3>&1 1>&2 2>&3)
+        inputError="Site Domain is Empty or Re enter site domain"
+    done;
+    echo "$(echo "$(curl ${configUrl})" | sed "s/domainName/${domainName}/g")" > /etc/nginx/sites-available/default;
 }
 
 installPhp() {
@@ -93,12 +104,14 @@ installPma() {
     mv ./phpMyAdmin-5.0.0-all-languages/ /var/www/public/pma &&
     rm -rf ./phpMyAdmin-5.0.0-all-languages.zip
 }
+
 clearDpkg() {
     rm /var/lib/apt/lists/lock &&
     rm /var/cache/apt/archives/lock &&
     rm /var/lib/dpkg/lock* &&
     dpkg --configure -a
 }
+
 setMySQLRootPassword() {
     password="1"
     passswordRepeat="2"
@@ -111,6 +124,14 @@ setMySQLRootPassword() {
     mysql -u root -e "UPDATE user SET plugin='mysql_native_password' WHERE User='root'" mysql &&
     mysql -u root -e "FLUSH PRIVILEGES" mysql &&
     mysql -u root -e "SET PASSWORD FOR root@'localhost' = Password('${password}')" mysql
+}
+
+restartInstalledPackage() {
+    systemctl restart nginx.service &&
+    systemctl restart php7.4-fpm.service &&
+    systemctl restart redis.service &&
+    systemctl restart mysql.service &&
+    systemctl restart vsftpd.service
 }
 
 clear && 
@@ -179,9 +200,8 @@ else
 
     if ! packageExists nginx; then
         installPackage nginx
-    fi && nginxConfigSetting && 
+    fi && nginxConfigSetting && nginxHeaderSetting
     
-
     ##################################
     ########## install php ###########
     ##################################
@@ -221,8 +241,14 @@ else
     ##################################
     ####### Set MySQL Password #######
     ##################################
-    setMySQLRootPassword
-    clear &&
+    setMySQLRootPassword &&
+
+    ##################################
+    ### Restart Installed Service ####
+    ##################################
+    restartInstalledPackage &&
+
+    clear && 
     echo "Finish Initialize Server"
     
 fi

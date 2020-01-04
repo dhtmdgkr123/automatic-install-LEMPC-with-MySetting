@@ -100,20 +100,16 @@ clearDpkg() {
     dpkg --configure -a
 }
 setMySQLRootPassword() {
-    while : ; do
-        read -s -p "Please Enter MySQL Root Password: " firstPassword
-        printf "\n"
-        read -s -p "Repeat MySQL root Password: " secondPassword
-        printf "\n"
-        if [[ "$firstPassword" == "$secondPassword" ]]; then
-            break;
-        else
-            echo "Password is not match. ReEnter MySQL Root Password"
-        fi;
+    password="1"
+    passswordRepeat="2"
+    while [[ "$password" != "$passwordRepeat" || -z "$password" ]]; do
+        password=$(whiptail --passwordbox "${passwordInvalidMessage}Please enter MySQL password" 20 78 3>&1 1>&2 2>&3)
+        passwordRepeat=$(whiptail --passwordbox "Please repeat the MySQL Password" 20 78 3>&1 1>&2 2>&3)
+        passwordInvalidMessage="Password is not match. ReEnter MySQL Root Password"
     done;
     mysql -u root -e "UPDATE user SET plugin='mysql_native_password' WHERE User='root'" mysql &&
     mysql -u root -e "FLUSH PRIVILEGES" mysql &&
-    mysql -u root -e "SET PASSWORD FOR root@'localhost' = Password('${firstPassword}')" mysql
+    mysql -u root -e "SET PASSWORD FOR root@'localhost' = Password('${password}')" mysql
 }
 
 clear && 

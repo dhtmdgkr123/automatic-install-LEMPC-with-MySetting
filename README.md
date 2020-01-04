@@ -13,7 +13,7 @@ Feature
 Usage
 =
 `
-$curl -S https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/serverSettingHelper.sh | sudo bash
+$ sudo bash -c "$(curl -S https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/serverSettingHelper.sh)"
 `
 ### Warning! after finish to setting your server will be reboot and this script download package!! please use only develper server!
 
@@ -57,10 +57,15 @@ $curl -S https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-w
 
 >><h4>Version 1.1.0</h4>
 >>1. Upgrade php 7.3<br />
->>2. Install Coposer<br />
+>>2. Install Composer<br />
 >>3. Install Codeigniter<br />
 >>4. Install Dotenv<br />
 
+>><h4>Version 1.1.1</h4>
+>>1. Upgrade php 7.4<br />
+>>2. Install Codeigniter With Secure Structure<br />
+>>3. Set MySQL Root Password<br />
+>>4. Update PhpMyAdmin Version<br />
 
 License
 -

@@ -101,17 +101,16 @@ clearDpkg() {
 }
 setMySQLRootPassword() {
     while : ; do
-        read -s -p "Enter MySQL Root Password: " firstPassword
+        read -s -p "Please Enter MySQL Root Password: " firstPassword
         printf "\n"
-        read -s -p "Retry Enter MySQL Password: " secondPassword
+        read -s -p "Repeat MySQL root Password: " secondPassword
         printf "\n"
         if [[ "$firstPassword" == "$secondPassword" ]]; then
             break;
         else
-            echo "Password is not match. Re Enter MySQL Root Password"
+            echo "Password is not match. ReEnter MySQL Root Password"
         fi;
     done;
-    
     mysql -u root -e "UPDATE user SET plugin='mysql_native_password' WHERE User='root'" mysql &&
     mysql -u root -e "FLUSH PRIVILEGES" mysql &&
     mysql -u root -e "SET PASSWORD FOR root@'localhost' = Password('${firstPassword}')" mysql

@@ -97,6 +97,29 @@ installPma() {
     mv ./phpMyAdmin-5.0.0-all-languages/ /var/www/public/pma &&
     rm -rf ./phpMyAdmin-5.0.0-all-languages.zip
 }
+clearDpkg() {
+    rm /var/lib/apt/lists/lock &&
+    rm /var/cache/apt/archives/lock &&
+    rm /var/lib/dpkg/lock* &&
+    dpkg --configure -a
+}
+setMySQLRootPassword() {
+    while : ; do
+        read -s -p "Enter MySQL Root Password: " firstPassword
+        printf "\n"
+        read -s -p "Retry Enter MySQL Password: " secondPassword
+        printf "\n"
+        if [[ "$firstPassword" == "$secondPassword" ]]; then
+            break;
+        else
+            echo "Password is not match. Re Enter MySQL Root Password"
+        fi;
+    done;
+    
+    mysql -u root -e "UPDATE user SET plugin='mysql_native_password' WHERE User='root'" mysql &&
+    mysql -u root -e "FLUSH PRIVILEGES" mysql &&
+    mysql -u root -e "SET PASSWORD FOR root@'localhost' = Password('${firstPassword}')" mysql
+}
 
 clear && 
 if [[ $EUID -ne 0 ]]; then
@@ -111,6 +134,7 @@ else
     ##################################
     
     apt-get -y update &&
+    clearDpkg &&
     apt-get -y upgrade &&
     
     ##################################
@@ -178,7 +202,8 @@ else
     ######## install maria-db ########
     ##################################
     if ! packageExists mariadb-server; then
-        installPackage mariadb-server mariadb-client
+        installPackage mariadb-server mariadb-client &&
+        setMySQLRootPassword
     fi &&
     
     ##################################

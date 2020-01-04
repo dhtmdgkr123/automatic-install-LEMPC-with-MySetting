@@ -225,12 +225,7 @@ else
     ##################################
     ####### Set MySQL Password #######
     ##################################
-    setMySQLRootPassword &&
-
-    ##################################
-    ######### Apt Auto remove ########
-    ##################################
-    apt-get -y autoremove
+    setMySQLRootPassword
     clear &&
     echo "Finish Initialize Server"
     

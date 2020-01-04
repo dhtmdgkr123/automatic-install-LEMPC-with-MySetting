@@ -30,10 +30,6 @@ checkDir() {
         mkdir -p "$1"
     fi
 }
-
-successAndIntalledMessage() {
-    clear && echo "success to install $1 will be install $2" && sleep 1 && clear
-}
 installComposer() {
     curl -sS https://getcomposer.org/installer -o composer-setup.php &&
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
@@ -202,8 +198,7 @@ else
     ######## install maria-db ########
     ##################################
     if ! packageExists mariadb-server; then
-        installPackage mariadb-server mariadb-client &&
-        setMySQLRootPassword
+        installPackage mariadb-server mariadb-client
     fi &&
     
     ##################################
@@ -225,6 +220,18 @@ else
     ##################################
     ########## install pma ###########
     ##################################
-    installPma
+    installPma &&
+
+    ##################################
+    ####### Set MySQL Password #######
+    ##################################
+    setMySQLRootPassword &&
+
+    ##################################
+    ######### Apt Auto remove ########
+    ##################################
+    apt-get -y autoremove
+    clear &&
+    echo "Finish Initialize Server"
     
 fi

@@ -4,7 +4,7 @@ packageExists() {
 }
 
 yesOrNo() {
-    echo $(whiptail --title "$2" --yesno "$1" 20 78 3>&1 1>&2 2>&3; echo $?)
+    echo "$(whiptail --title "$2" --yesno "$1" 20 78 3>&1 1>&2 2>&3; echo $?)"
 }
 
 sshRootSetting() {
@@ -62,18 +62,22 @@ nginxConfigSetting() {
     title="Install HTTPS"
     checkSSL="Do You Want to install Https?"
     isUseSSL=$(yesOrNo "$checkSSL" "$title")
-    
+
+    while ! validAddress "$domainName" || [[ -z "$domainName" ]]; do
+        domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain or Ip Address \nIf You Enter Domain, You must include http:// or https://\nExample: http://www.exam.com\nExample : 49.0.33.1" 20 78 3>&1 1>&2 2>&3)
+        inputError="Site Domain is Empty or Re enter site domain"
+    done;
+
     if [[ "$isUseSSL" -eq 0 ]]; then
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/SSLDefault"
+        cronMessage="* 4 * * * /usr/bin/certbot renew --renew-hook=\"systemctl restart nginx\""
+        installPackage letsencrypt &&
+        letsencrypt certonly —webroot —webroot-path=/var/www/pubic -d "${domainName}"
+        crontab -l | { cat; echo "${cronMessage}"; } | crontab -
     else
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/NoSSLDefault"    
     fi;
-
-    while ! validAddress "$domainName" || [[ -z "$domainName" ]]; do
-        domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain or Ip Address \nIf You Enter Domain, You must include "http://" or "https://"\nExample: http://www.exam.com\nExample : 49.0.33.1" 20 78 3>&1 1>&2 2>&3)
-        inputError="Site Domain is Empty or Re enter site domain"
-    done;
-    echo "$(echo "$(curl ${configUrl})" | sed "s/domainName/${domainName}/g")" > /etc/nginx/sites-available/default;
+    echo "$(echo "$(curl ${configUrl})" | sed "s/domainName/${domainName}/g")" > /etc/nginx/sites-available/default
 }
 
 installPhp() {
@@ -114,7 +118,7 @@ clearDpkg() {
 
 setMySQLRootPassword() {
     password="1"
-    passswordRepeat="2"
+    passwordRepeat="2"
     title="MySQL root Password Setting"
     while [[ "$password" != "$passwordRepeat" || -z "$password" ]]; do
         password=$(whiptail --title "${title}" --passwordbox "${passwordInvalidMessage}Please enter MySQL password" 20 78 3>&1 1>&2 2>&3)

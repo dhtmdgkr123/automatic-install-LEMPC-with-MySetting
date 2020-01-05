@@ -5,7 +5,7 @@ Feature
 =
 + Automatic install Nginx <br />
 + Automatic install MariaDb <br />
-+ Automatic install php 7.3, Codeigniter, dotenv using Composer<br />
++ Automatic install php 7.4, Codeigniter, dotenv using Composer<br />
 + Automatic install PhpMyAdmin<br />
 + Automatic install ssh server with root acces setting<br />
 + Automatic install vsftpd with root access and umask 022<br />

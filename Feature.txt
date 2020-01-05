@@ -6,11 +6,11 @@ Feature
  2. Automatic Install Maria DB
  3. Automatic Install Nginx With Custom Setting
  4. Automatic Install Codeigniter With Composer
- 5. Automatic Install Redis Integrate Redis With Custom Codeigniter
+ 5. Automatic Install Redis Integrate Redis with custom Codeigniter
  6. Automatic Install PhpMyAdmin 5.0.0
- 6. Automatic Install FTP Server And Allow Root Access and Set Default Umask 022
- 6. Automatic Install open-ssh server And Allow root Access
- 7. Codeigniter Secure Structure
+ 7. Automatic Install FTP Server and allow root access and set default Umask 022
+ 8. Automatic Install open-ssh server and allow root Access
+ 9. Codeigniter Secure folder structure
 
                        _ _     _                 _       _        __ ___  ____             
                       | | |   | |               | |     | |      /_ |__ \|___ \            

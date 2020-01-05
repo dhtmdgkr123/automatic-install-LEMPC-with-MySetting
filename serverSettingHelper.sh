@@ -262,6 +262,7 @@ else
     ########## Feature Log ###########
     ##################################
     whiptail --textbox /dev/stdin 40 100 <<< "$(curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/Feature.txt)" --title "Feature Log" &&
+    clear &&
     cat << "EOF"
                        _ _     _                 _       _        __ ___  ____             
                       | | |   | |               | |     | |      /_ |__ \|___ \            
@@ -277,5 +278,6 @@ else
              | |    |  __| | |\/| |  ___/| |         | | | '_ \/ __| __/ _` | | |/ _ \ '__|
              | |____| |____| |  | | |    | |____    _| |_| | | \__ \ || (_| | | |  __/ |   
              |______|______|_|  |_|_|     \_____|  |_____|_| |_|___/\__\__,_|_|_|\___|_|   
+             
 EOF
 fi

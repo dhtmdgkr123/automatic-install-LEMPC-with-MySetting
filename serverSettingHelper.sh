@@ -119,11 +119,11 @@ clearDpkg() {
 setMySQLRootPassword() {
     password="1"
     passwordRepeat="2"
-    title="MySQL root Password Setting"
+    title="MariaDB root Password Setting"
     while [[ "$password" != "$passwordRepeat" || -z "$password" ]]; do
-        password=$(whiptail --title "${title}" --passwordbox "${passwordInvalidMessage}Please enter MySQL password" 20 78 3>&1 1>&2 2>&3)
+        password=$(whiptail --title "${title}" --passwordbox "${passwordInvalidMessage}Please enter MariaDB password" 20 78 3>&1 1>&2 2>&3)
         passwordRepeat=$(whiptail --title "${title}" --passwordbox "Please repeat the MySQL Password" 20 78 3>&1 1>&2 2>&3)
-        passwordInvalidMessage="Password is not match. ReEnter MySQL Root Password"
+        passwordInvalidMessage="Password is not match. ReEnter MariaDB Root Password"
     done;
     mysql -u root -e "UPDATE user SET plugin='mysql_native_password' WHERE User='root'" mysql &&
     mysql -u root -e "FLUSH PRIVILEGES" mysql &&
@@ -252,7 +252,30 @@ else
     ##################################
     restartInstalledPackage &&
 
-    clear && 
-    echo "Finish Initialize Server"
-    
+    ##################################
+    ######### Add Git ignore #########
+    ##################################
+    echo -e ".env\n/public/pma/*" >> /var/www/.gitignore &&
+    clear &&
+
+    ##################################
+    ########## Feature Log ###########
+    ##################################
+    whiptail --textbox /dev/stdin 40 100 <<< "$(curl https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/Feature.txt)" --title "Feature Log" &&
+    cat << "EOF"
+                       _ _     _                 _       _        __ ___  ____             
+                      | | |   | |               | |     | |      /_ |__ \|___ \            
+                    __| | |__ | |_ _ __ ___   __| | __ _| | ___ __| |  ) | __) |           
+                   / _` | '_ \| __| '_ ` _ \ / _` |/ _` | |/ / '__| | / / |__ <            
+                  | (_| | | | | |_| | | | | | (_| | (_| |   <| |  | |/ /_ ___) |           
+                   \__,_|_| |_|\__|_| |_| |_|\__,_|\__, |_|\_\_|  |_|____|____/            
+                                                    __/ |                                  
+                                                   |___/
+              _      ______ __  __ _____   _____    _____           _        _ _           
+             | |    |  ____|  \/  |  __ \ / ____|  |_   _|         | |      | | |          
+             | |    | |__  | \  / | |__) | |         | |  _ __  ___| |_ __ _| | | ___ _ __ 
+             | |    |  __| | |\/| |  ___/| |         | | | '_ \/ __| __/ _` | | |/ _ \ '__|
+             | |____| |____| |  | | |    | |____    _| |_| | | \__ \ || (_| | | |  __/ |   
+             |______|______|_|  |_|_|     \_____|  |_____|_| |_|___/\__\__,_|_|_|\___|_|   
+EOF
 fi

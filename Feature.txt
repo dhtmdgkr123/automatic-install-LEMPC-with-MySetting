@@ -1,0 +1,32 @@
+                                Custom Automatic LEMPC Installer
+                                    Version 1.1.1 5 Jan 2020
+
+Feature
+ 1. Automatic Install PHP 7.4 with intl, pdo, mysql, predis, 
+ 2. Automatic Install Maria DB
+ 3. Automatic Install Nginx With Custom Setting
+ 4. Automatic Install Codeigniter With Composer
+ 5. Automatic Install Redis Integrate Redis With Custom Codeigniter
+ 6. Automatic Install PhpMyAdmin 5.0.0
+ 6. Automatic Install FTP Server And Allow Root Access and Set Default Umask 022
+ 6. Automatic Install open-ssh server And Allow root Access
+ 7. Codeigniter Secure Structure
+
+                       _ _     _                 _       _        __ ___  ____             
+                      | | |   | |               | |     | |      /_ |__ \|___ \            
+                    __| | |__ | |_ _ __ ___   __| | __ _| | ___ __| |  ) | __) |           
+                   / _` | '_ \| __| '_ ` _ \ / _` |/ _` | |/ / '__| | / / |__ <            
+                  | (_| | | | | |_| | | | | | (_| | (_| |   <| |  | |/ /_ ___) |           
+                   \__,_|_| |_|\__|_| |_| |_|\__,_|\__, |_|\_\_|  |_|____|____/            
+                                                    __/ |                                  
+                                                   |___/
+              _      ______ __  __ _____   _____    _____           _        _ _           
+             | |    |  ____|  \/  |  __ \ / ____|  |_   _|         | |      | | |          
+             | |    | |__  | \  / | |__) | |         | |  _ __  ___| |_ __ _| | | ___ _ __ 
+             | |    |  __| | |\/| |  ___/| |         | | | '_ \/ __| __/ _` | | |/ _ \ '__|
+             | |____| |____| |  | | |    | |____    _| |_| | | \__ \ || (_| | | |  __/ |   
+             |______|______|_|  |_|_|     \_____|  |_____|_| |_|___/\__\__,_|_|_|\___|_|   
+             
+
+
+devloper : <dhtmdgkr123> <osh12201@gmail.com>

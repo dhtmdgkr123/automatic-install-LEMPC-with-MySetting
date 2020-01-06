@@ -4,12 +4,12 @@ server {
     root /var/www/public;
     index index.php;
     server_name domainName;
-    if (!-e \$request_filename) {
+    if (!-e $request_filename) {
         rewrite ^/(.*)$ /index.php?/\$1 last;
         break;
     }
     location / {
-        try_files \$uri \$uri/ =404;
+        try_files $uri $uri/ =404;
     }
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;

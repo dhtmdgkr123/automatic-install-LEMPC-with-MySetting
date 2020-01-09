@@ -91,6 +91,10 @@ nginxConfigSetting() {
         done;
 
         domainName="$(echo $domainName | awk -F[/:] '{print $4}')"
+        tmpConfigUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/NoSSLDefault"
+        
+        echo "$(echo "$(curl ${tmpConfigUrl})" | sed "s/domainName/${domainName}/g")" > /etc/nginx/sites-available/default
+        
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/SSLDefault"
         cronMessage="* 4 * * * /usr/bin/certbot renew --renew-hook=\"systemctl restart nginx\""
         installPackage letsencrypt &&

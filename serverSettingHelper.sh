@@ -51,6 +51,12 @@ function validAddress() {
     return
 }
 
+function isEmail() {
+    emailRegex="^[a-z0-9!#\$%&'*+/=?^_\`{|}~-]+(\.[a-z0-9!#$%&'*+/=?^_\`{|}~-]+)*@([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]([a-z0-9-]*[a-z0-9])?\$"
+    [[ $1 =~ $emailRegex ]];
+    return;
+}
+
 installComposer() {
     curl -sS https://getcomposer.org/installer -o composer-setup.php &&
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
@@ -79,13 +85,18 @@ nginxConfigSetting() {
             inputError="Site Domain is Empty or Re enter site domain"
         done;
 
+        while ! isEmail "$emailAddress" || [[ -z "$emailAddress" ]]; do
+            emailAddress=$(whiptail --title "${title}" --inputbox "${inputError}Please enter Your Email Address" 20 78 3>&1 1>&2 2>&3)
+            inputError="Site Domain is Empty or Re enter site domain"
+        done;
+
+        domainName="$(echo $domainName | awk -F[/:] '{print $4}')"
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/SSLDefault"
         cronMessage="* 4 * * * /usr/bin/certbot renew --renew-hook=\"systemctl restart nginx\""
         installPackage letsencrypt &&
-        letsencrypt certonly —webroot —webroot-path=/var/www/pubic -d "${domainName}"
+        letsencrypt certonly --webroot --webroot-path=/var/www/public -d "${domainName}" -m "${emailAddress}"
         crontab -l | { cat; echo "${cronMessage}"; } | crontab -
     else
-
         while ! validAddress "$domainName" || [[ -z "$domainName" ]]; do
             domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain or Ip Address \nIf You Enter Domain, You must include http:// or https://\nExample: http://www.exam.com\nExample : 49.0.33.1" 20 78 3>&1 1>&2 2>&3)
             inputError="Site Domain is Empty or Re enter site domain"

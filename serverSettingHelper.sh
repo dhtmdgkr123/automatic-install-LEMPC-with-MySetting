@@ -58,7 +58,7 @@ installComposer() {
 
 installCodeigniter() {
     cd /var &&
-    composer create-project dhtmdgkr123/codeigniter-custom:dev-master www
+    composer create-project --remove-vcs dhtmdgkr123/codeigniter-custom:dev-master www
 }
 
 nginxHeaderSetting() {
@@ -247,7 +247,7 @@ else
     if ! packageExists composer; then
         installComposer
     fi &&
-    
+
     ##################################
     ####### install Codeigniter ######
     ##################################

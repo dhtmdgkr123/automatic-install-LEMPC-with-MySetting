@@ -34,7 +34,16 @@ checkDir() {
         mkdir -p "$1"
     fi
 }
-
+function isUrl() {
+    urlRegex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+    [[ $1 =~ $urlRegex ]];
+    return
+}
+function isIp() {
+    ipRegex='^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+    [[ $1 =~ $ipRegex ]];
+    return
+}
 function validAddress() {
     urlRegex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
     ipRegex='^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
@@ -62,21 +71,32 @@ nginxConfigSetting() {
     title="Install HTTPS"
     checkSSL="Do You Want to install Https?"
     isUseSSL=$(yesOrNo "$checkSSL" "$title")
-
-    while ! validAddress "$domainName" || [[ -z "$domainName" ]]; do
-        domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain or Ip Address \nIf You Enter Domain, You must include http:// or https://\nExample: http://www.exam.com\nExample : 49.0.33.1" 20 78 3>&1 1>&2 2>&3)
-        inputError="Site Domain is Empty or Re enter site domain"
-    done;
-
+    
     if [[ "$isUseSSL" -eq 0 ]]; then
+        
+        while ! isUrl "$domainName" || [[ -z "$domainName" ]]; do
+            domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain \nIf You Enter Domain, You must include http:// or https://\nExample: http://www.exam.com" 20 78 3>&1 1>&2 2>&3)
+            inputError="Site Domain is Empty or Re enter site domain"
+        done;
+
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/SSLDefault"
         cronMessage="* 4 * * * /usr/bin/certbot renew --renew-hook=\"systemctl restart nginx\""
         installPackage letsencrypt &&
         letsencrypt certonly —webroot —webroot-path=/var/www/pubic -d "${domainName}"
         crontab -l | { cat; echo "${cronMessage}"; } | crontab -
     else
+
+        while ! validAddress "$domainName" || [[ -z "$domainName" ]]; do
+            domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain or Ip Address \nIf You Enter Domain, You must include http:// or https://\nExample: http://www.exam.com\nExample : 49.0.33.1" 20 78 3>&1 1>&2 2>&3)
+            inputError="Site Domain is Empty or Re enter site domain"
+        done;
+
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/NoSSLDefault"    
     fi;
+    if isUrl "$domainName"; then
+        domainName="$(echo $domainName | awk -F[/:] '{print $4}')"
+    fi;
+
     echo "$(echo "$(curl ${configUrl})" | sed "s/domainName/${domainName}/g")" > /etc/nginx/sites-available/default
 }
 
@@ -204,7 +224,7 @@ else
 
     if ! packageExists nginx; then
         installPackage nginx
-    fi && nginxConfigSetting && nginxHeaderSetting
+    fi && nginxHeaderSetting
     
     ##################################
     ########## install php ###########
@@ -229,12 +249,16 @@ else
     fi &&
     
     ##################################
-    ######## install CI, REDIS #######
+    ####### install Codeigniter ######
     ##################################
     export COMPOSER_ALLOW_SUPERUSER=1 &&
     php --ini &&
     rm -rf /var/www &&
     installCodeigniter &&
+
+    ##################################
+    ##### install Redis & Predis #####
+    ##################################
     installRedis &&
     
     ##################################
@@ -246,6 +270,11 @@ else
     ####### Set MySQL Password #######
     ##################################
     setMySQLRootPassword &&
+
+    ##################################
+    ##### Set Nginx default host #####
+    ##################################
+    nginxConfigSetting &&
 
     ##################################
     ### Restart Installed Service ####

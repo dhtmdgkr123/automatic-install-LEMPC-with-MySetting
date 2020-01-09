@@ -84,17 +84,18 @@ nginxConfigSetting() {
             domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain \nIf You Enter Domain, You must include http:// or https://\nExample: http://www.exam.com" 20 78 3>&1 1>&2 2>&3)
             inputError="Site Domain is Empty or Re enter site domain"
         done;
-
+        inputError=""
         while ! isEmail "$emailAddress" || [[ -z "$emailAddress" ]]; do
             emailAddress=$(whiptail --title "${title}" --inputbox "${inputError}Please enter Your Email Address" 20 78 3>&1 1>&2 2>&3)
-            inputError="Site Domain is Empty or Re enter site domain"
+            inputError="Email is Empty or Invalid Email"
         done;
 
         domainName="$(echo $domainName | awk -F[/:] '{print $4}')"
         tmpConfigUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/NoSSLDefault"
         
         echo "$(echo "$(curl ${tmpConfigUrl})" | sed "s/domainName/${domainName}/g")" > /etc/nginx/sites-available/default
-        
+        systemctl restart nginx
+
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/SSLDefault"
         cronMessage="* 4 * * * /usr/bin/certbot renew --renew-hook=\"systemctl restart nginx\""
         installPackage letsencrypt &&
@@ -105,7 +106,6 @@ nginxConfigSetting() {
             domainName=$(whiptail --title "${title}" --inputbox "${inputError}Please enter site domain or Ip Address \nIf You Enter Domain, You must include http:// or https://\nExample: http://www.exam.com\nExample : 49.0.33.1" 20 78 3>&1 1>&2 2>&3)
             inputError="Site Domain is Empty or Re enter site domain"
         done;
-
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/NoSSLDefault"    
     fi;
     if isUrl "$domainName"; then

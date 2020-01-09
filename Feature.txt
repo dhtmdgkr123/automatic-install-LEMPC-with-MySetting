@@ -2,15 +2,17 @@
                                     Version 1.1.1 5 Jan 2020
 
 Feature
- 1. Automatic Install PHP 7.4 with intl, pdo, mysql, predis, 
- 2. Automatic Install Maria DB
- 3. Automatic Install Nginx With Custom Setting
- 4. Automatic Install Codeigniter With Composer
- 5. Automatic Install Redis Integrate Redis with custom Codeigniter
- 6. Automatic Install PhpMyAdmin 5.0.0
- 7. Automatic Install FTP Server and allow root access and set default Umask 022
- 8. Automatic Install open-ssh server and allow root Access
- 9. Codeigniter Secure folder structure
+  1. Automatic Install PHP 7.4 with intl, pdo, mysql, predis, 
+  2. Automatic Install Maria DB
+  3. Automatic Install Nginx With Custom Setting
+  4. Automatic Install Codeigniter With Composer
+  5. Automatic Install Redis Integrate Redis with custom Codeigniter
+  6. Automatic Install PhpMyAdmin 5.0.0
+  7. Automatic Install FTP Server and allow root access and set default Umask 022
+  8. Automatic Install open-ssh server and allow root Access
+  9. Codeigniter Secure folder structure
+ 10. Support SSL Using Let's Encrypt
+ 11. 
 
                        _ _     _                 _       _        __ ___  ____             
                       | | |   | |               | |     | |      /_ |__ \|___ \            

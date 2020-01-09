@@ -238,7 +238,8 @@ else
     ##################################
 
     if ! packageExists nginx; then
-        installPackage nginx
+        installPackage nginx &&
+        installPackage nginx-extras
     fi && nginxHeaderSetting
     
     ##################################

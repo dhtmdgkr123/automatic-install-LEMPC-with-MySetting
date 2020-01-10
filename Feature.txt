@@ -2,7 +2,7 @@
                                     Version 1.1.1 5 Jan 2020
 
 Feature
-  1. Automatic Install PHP 7.4 with intl, pdo, mysql, predis, 
+  1. Automatic Install PHP 7.4 with intl, pdo, mysql, predis
   2. Automatic Install Maria DB
   3. Automatic Install Nginx With Custom Setting
   4. Automatic Install Codeigniter With Composer
@@ -12,7 +12,8 @@ Feature
   8. Automatic Install open-ssh server and allow root Access
   9. Codeigniter Secure folder structure
  10. Support SSL Using Let's Encrypt
- 11. 
+ 11. Automatic Renew SSL Certficate
+ 12. Set Maria-DB root password
 
                        _ _     _                 _       _        __ ___  ____             
                       | | |   | |               | |     | |      /_ |__ \|___ \            

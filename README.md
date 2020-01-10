@@ -9,6 +9,8 @@ Feature
 + Automatic install PhpMyAdmin<br />
 + Automatic install ssh server with root acces setting<br />
 + Automatic install vsftpd with root access and umask 022<br />
++ Automatic install Let's Encrypt and Auto renew Daily 04:00 AM <br />
++ Set MySQL root password <br />
 
 Usage
 =
@@ -66,6 +68,8 @@ $ sudo bash -c "$(curl -S https://raw.githubusercontent.com/dhtmdgkr123/automati
 >>2. Install Codeigniter With Secure Structure<br />
 >>3. Set MySQL Root Password<br />
 >>4. Update PhpMyAdmin Version<br />
+>>5. Support Let's Encrypt<br />
+>>6. Let's Encrypt SSL Auto Renew<br />
 
 License
 -

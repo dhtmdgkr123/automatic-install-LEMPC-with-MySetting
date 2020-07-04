@@ -263,15 +263,7 @@ else
     if ! packageExists composer; then
         installComposer
     fi &&
-
-    ##################################
-    ####### install Codeigniter ######
-    ##################################
-    export COMPOSER_ALLOW_SUPERUSER=1 &&
-    php --ini &&
-    rm -rf /var/www &&
-    installCodeigniter &&
-
+    
     ##################################
     ##### install Redis & Predis #####
     ##################################
@@ -296,6 +288,14 @@ else
     ### Restart Installed Service ####
     ##################################
     restartInstalledPackage &&
+
+    ##################################
+    ####### install Codeigniter ######
+    ##################################
+    export COMPOSER_ALLOW_SUPERUSER=1 &&
+    php --ini &&
+    rm -rf /var/www &&
+    installCodeigniter &&
 
     ##################################
     ######### Add Git ignore #########

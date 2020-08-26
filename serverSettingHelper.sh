@@ -138,7 +138,7 @@ installRedis() {
 
 installPma() {
     cd ~ &&
-    wget https://files.phpmyadmin.net/phpMyAdmin/5.0.0/phpMyAdmin-5.0.0-all-languages.zip &&
+    wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.zip &&
     unzip phpMyAdmin-5.0.0-all-languages.zip &&
     mv ./phpMyAdmin-5.0.0-all-languages/ /var/www/public/pma &&
     rm -rf ./phpMyAdmin-5.0.0-all-languages.zip

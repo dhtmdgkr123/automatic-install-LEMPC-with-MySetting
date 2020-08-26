@@ -137,11 +137,12 @@ installRedis() {
 }
 
 installPma() {
+    pmaVersion="5.0.2"
     cd ~ &&
-    wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.zip &&
-    unzip phpMyAdmin-5.0.0-all-languages.zip &&
-    mv ./phpMyAdmin-5.0.0-all-languages/ /var/www/public/pma &&
-    rm -rf ./phpMyAdmin-5.0.0-all-languages.zip
+    wget https://files.phpmyadmin.net/phpMyAdmin/$pmaVersion/phpMyAdmin-5.0.2-all-languages.zip &&
+    unzip phpMyAdmin-$pmaVersion-all-languages.zip &&
+    mv ./phpMyAdmin-$pmaVersion-all-languages/ /var/www/public/pma &&
+    rm -rf ./phpMyAdmin-$pmaVersion-all-languages.zip
 }
 
 clearDpkg() {
@@ -270,11 +271,6 @@ else
     installRedis &&
     
     ##################################
-    ########## install pma ###########
-    ##################################
-    installPma &&
-
-    ##################################
     ####### Set MySQL Password #######
     ##################################
     setMySQLRootPassword &&
@@ -301,6 +297,11 @@ else
     ######### Add Git ignore #########
     ##################################
     echo -e ".env\n/public/pma/*" >> /var/www/.gitignore &&
+
+    ##################################
+    ########## install pma ###########
+    ##################################
+    installPma &&
     clear &&
 
     ##################################

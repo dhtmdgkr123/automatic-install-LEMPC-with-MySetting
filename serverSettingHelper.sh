@@ -26,7 +26,7 @@ vsftpdRootSetting() {
 }
 
 installPackage() {
-    apt-get -y install "$1"
+   clearDpkg && apt-get -y install "$1"
 }
 
 checkDir() {
@@ -97,9 +97,9 @@ nginxConfigSetting() {
         systemctl restart nginx
 
         configUrl="https://raw.githubusercontent.com/dhtmdgkr123/automatic-install-LEMPC-with-MySetting/master/SSLDefault"
-        cronMessage="* 4 * * * /usr/bin/certbot renew --renew-hook=\"systemctl restart nginx\""
+        cronMessage="* 4 * * * /usr/bin/certbot renew --renew-hook=\"systemctl restart nginx\" && systemctl restart nginx"
         installPackage letsencrypt &&
-        letsencrypt certonly --webroot --webroot-path=/var/www/public -d "${domainName}" -m "${emailAddress}"
+        letsencrypt certonly --webroot --webroot-path=/var/www/public -d "${domainName}" -m "${emailAddress}" --agree-tos
         crontab -l | { cat; echo "${cronMessage}"; } | crontab -
     else
         while ! validAddress "$domainName" || [[ -z "$domainName" ]]; do
@@ -145,9 +145,9 @@ installPma() {
 }
 
 clearDpkg() {
-    rm /var/lib/apt/lists/lock &&
-    rm /var/cache/apt/archives/lock &&
-    rm /var/lib/dpkg/lock* &&
+    rm /var/lib/apt/lists/lock
+    rm /var/cache/apt/archives/lock
+    rm /var/lib/dpkg/lock*
     dpkg --configure -a
 }
 

@@ -1,5 +1,7 @@
+
 server Setting Script base on bash and ubuntu16.04 LTS
 =
+![feature](https://user-images.githubusercontent.com/27611405/109754562-975dae80-7c27-11eb-850e-9d2bbc799a4a.png)
 
 Feature
 =
